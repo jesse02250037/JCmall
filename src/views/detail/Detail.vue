@@ -134,6 +134,8 @@ export default {
       product.desc=this.goods.desc;
       product.iid=this.iid
       product.price=this.goods.realPrice
+
+      this.$store.dispatch('addCart',product)
     }
   },
 };

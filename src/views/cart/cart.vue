@@ -1,13 +1,17 @@
 <template>
-<div>
-  <h2>购物车</h2>
+<div id="cart">
+  <!-- 顶部导航栏 -->
+  <cart-nav-bar/>
 </div>
 </template>
 
 <script>
-
+import CartNavBar from './childcpn/CartNavBar'
 export default {
-  name:'Cart'
+  name:'Cart',
+  components:{
+    CartNavBar
+  }
 }
 </script>
 <style scoped>
