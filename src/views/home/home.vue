@@ -56,6 +56,7 @@ import Scroll from "components/common/scroll/Scroll";
 import BackTop from "components/content/BackTop";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
+import { debounce } from "../../common/debounce";
 export default {
   name: "Home",
   data() {
@@ -71,7 +72,7 @@ export default {
       isShow: false,
       tabControlTop: 0,
       isTabShow: false,
-      saveY:0
+      saveY: 0,
     };
   },
   computed: {
@@ -94,6 +95,18 @@ export default {
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
+
+    this.$bus.$on("HomeImageLoad", () => {
+      this.$refs.scroll.scroll.refresh()
+    });
+  },
+  // 记录离开的值，回来回到记录的值，然后重新刷新
+  activated() {
+    this.$refs.scroll.scroll.scrollTo(0, this.saveY, 0);
+    this.$refs.scroll.scroll.refresh();
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.scroll.y;
   },
   methods: {
     // 事件监听方法
@@ -117,15 +130,15 @@ export default {
       this.$refs.scroll.scroll.scrollTo(0, 0, 500);
     },
     getPosition(position) {
-      this.isShow = (-position.y) > 1000;
+      this.isShow = -position.y > 1000;
 
       // 判断是否吸顶
-      this.isTabShow = (-position.y) > this.tabControlTop;
+      this.isTabShow = -position.y > this.tabControlTop;
     },
     loadmore() {
       this.getHomeGoods(this.currentType);
-      this.$refs.scroll.scroll.finishPullUp();
       this.$refs.scroll.scroll.refresh();
+      this.$refs.scroll.scroll.finishPullUp();
     },
     // 获取tab-bar-control的offsettop，根据轮播图的图片加载完成之后再获取值
     swiperImgLoad() {

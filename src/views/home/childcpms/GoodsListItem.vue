@@ -1,6 +1,6 @@
 <template>
   <div class="goodsItem" @click="goToDetail">
-    <img :src="goodsItem.show.img" alt="" />
+    <img :src="showImage" alt="" @load="imgLoad" />
     <div class="goodsInfo">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
@@ -23,14 +23,27 @@ export default {
       },
     },
   },
+  computed: {
+    showImage() {
+      return this.goodsItem.image || this.goodsItem.show.img;
+    },
+  },
   methods: {
     goToDetail() {
       this.$router.push({
-        path:'/detail',
-        query:{
-          iid:this.goodsItem.iid
-        }
+        path: "/detail",
+        query: {
+          iid: this.goodsItem.iid,
+        },
       });
+    },
+    imgLoad() {
+      if (this.$route.path.indexOf("/home")) {
+        this.$bus.$emit("HomeImageLoad");
+      }
+      if (this.$route.path.indexOf("/detail")) {
+        this.$bus.$emit("DetailImageLoad");
+      }
     },
   },
 };

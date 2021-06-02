@@ -5,6 +5,7 @@
       :key="item.index"
       :goodsItem="item"
       class="goods-list-item"
+      @load="imgLoad"
     ></goods-list-item>
   </div>
 </template>
@@ -30,7 +31,9 @@ export default {
     GoodsListItem,
   },
   methods: {
-
+    imgLoad(){
+      this.$emit('imgLoad')
+    }
 
 
 
