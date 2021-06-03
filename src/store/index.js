@@ -12,18 +12,23 @@ export default new Vuex.Store({
       payload.count++
     },
     addItem(state,payload){
+      payload.checked=true
       state.cartList.push(payload)
     }
   },
   actions: {
     addCart(context,payload){
-      let index=context.state.cartList.indexOf(payload)
-      if(index === -1){
+      let oldProduct=null
+      for(let item of this.state.cartList){
+        if(item.iid===payload.iid){
+          oldProduct=item;
+        }
+      }
+      if(oldProduct){
+        context.commit('addCounter',oldProduct)
+      }else{
         payload.count=1;
         context.commit('addItem',payload)
-      }else{
-        let oldProduct=context.state.cartList[index];
-        context.commit('addCounter',oldProduct)
       }
     }
   },
